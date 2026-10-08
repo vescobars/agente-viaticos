@@ -20,6 +20,9 @@ client = genai.Client(api_key=API_KEY)
 
 
 def ask(question: str) -> str:
+    question = question.strip()
+    if not question:
+        raise ValueError("The question is empty.")
     interaction = client.interactions.create(
         model=MODEL,
         input=question,
@@ -30,4 +33,9 @@ def ask(question: str) -> str:
 
 if __name__ == "__main__":
     question = input("Pregunta: ")
-    print(ask(question))
+    try:
+        print(ask(question))
+    except ValueError:
+        print("Por favor escribe una pregunta antes de presionar Enter.")
+    except Exception as error:
+        print(f"No se pudo obtener una respuesta: {type(error).__name__}: {error}")
